@@ -1,0 +1,82 @@
+[path]
+resume_filename = ''
+
+[path.train]
+scp_path = "Scp/cleanclean/train/wav.scp"
+
+[path.val]
+scp_path = "Scp/cleanclean/dev/wav.scp"
+
+[path.test]
+scp_path = "Scp/cleanclean/test/wav.scp"
+
+[path.blind]
+scp_path = ""
+
+[gpu]
+gpu_ids = [7]
+
+[net.idt]
+is_diff = true
+is_trd = true
+is_ssb = false
+is_vf = true
+modula = 0.8
+
+[net.generator]
+n_layers = 4
+lstm_hidden_units = 256
+attn_n_head = 4
+attn_approx_qk_dim = 512
+emb_dim = 32
+emb_ks = 8
+emb_hs = 8
+activation = "prelu"
+eps = 1e-5
+
+[signal]
+sr = 16000
+chunk_length = 4.0
+win_size = 0.02
+win_shift = 0.01
+fft_num = 320
+band_split = 1
+beta = 1.0
+
+[signal.idt]
+sr = 16000
+fs = 16000
+chunk_length = 8.0
+win_size = 640
+win_shift = 320
+fft_num = 640
+
+[loss_function]
+alpha = 0.5
+l_type = "L2"
+zero_mean = true
+scale_label = true
+
+[optimizer]
+name = "adamw"
+logging_period = 200
+epochs = 250
+gradient_norm = 1.0
+early_stop_freq = 100
+
+[optimizer.generator]
+beta1 = 0.9
+beta2 = 0.999
+min_lr = 1e-8
+factor = 0.5
+weight_decay = 1e-7
+lr = 2e-4
+halve_freq = 2
+
+[dataloader]
+num_workers = 4
+pin_memory = true
+batch_size = 8
+
+[save]
+save_filename = "Exp/CasualTFGridNet_TFDiffVF_inv"
