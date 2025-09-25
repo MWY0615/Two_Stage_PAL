@@ -56,7 +56,7 @@ def normalize(audio,
 class Decoder(object):
     def __init__(self,
                  generator,
-                 gpuid=(7,),
+                 gpuid=(1,),
                  cpt_dir=None,
                  config=None):
         if not torch.cuda.is_available():
@@ -93,7 +93,7 @@ class Decoder(object):
         self.nnet = pal
 
         # set eval model
-        cpt_fname = os.path.join(cpt_dir, 'checkpoint', "best_622.pt.tar")
+        cpt_fname = os.path.join(cpt_dir, 'checkpoint', "best.pt.tar")
         cpt = torch.load(cpt_fname, map_location="cpu")
         logger.info("Load checkpoint from {}, epoch {:d}".format(cpt_fname, cpt["epoch"]))
 
@@ -165,18 +165,18 @@ def run(cpt_dir, config):
         write_wav(os.path.join(cpt_dir, 'best', 'PAL_rsc',
                                os.path.basename(mic)
                                ),
-                  pal_rsc_wav,
+                  normalize(pal_rsc_wav),
                   fs=configs['signal']['sr'])
 
         write_wav(os.path.join(cpt_dir, 'best', 'Pre',
                                os.path.basename(mic)
                                ),
-                  est_wav,
+                  normalize(est_wav),
                   fs=configs['signal']['sr'])
         write_wav(os.path.join(cpt_dir, 'best', 'Tar',
                                os.path.basename(mic)
                                ),
-                  mic_wav * mic_std_,
+                  normalize(mic_wav),
                   fs=configs['signal']['sr'])
         logger.info("Compute on utterance: {:s}...".format(os.path.basename(mic)))
 
